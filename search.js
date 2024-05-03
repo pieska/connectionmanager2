@@ -106,7 +106,6 @@ export class SearchProvider {
             if (!cancellable.is_cancelled())
                 resolve(resultMetas);
         });
-        callback(metas);
     }
 }
 export class SshSearchProvider {
