@@ -1,9 +1,9 @@
-Connection Manager for GNOME 45
+Connection Manager for GNOME 46
 =========================
 
 Connection Manager was written by [Stefano Ciancio](https://github.com/sciancio) as a copy of [sshmenu](http://sshmenu.sourceforge.net/) from GNOME 2. Sadly, he lost interest in maintaining the extension after GNOME 3.32 on May 2019. Other maintainers have continued to provide updates to this extension over the years. 
 
-This repository includes an update that supports GNOME 45.
+This repository includes branches supporting GNOME pre-45, 45, 46.
 
 What is Connection Manager
 ========================
