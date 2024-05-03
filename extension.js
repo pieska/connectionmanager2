@@ -1,5 +1,5 @@
-//   ConnectionManager 3 - Simple GUI app for Gnome 3 that provides a menu 
-//   for initiating SSH/Telnet/Custom Apps connections. 
+//   ConnectionManager 3 - Simple GUI app for Gnome 3 that provides a menu
+//   for initiating SSH/Telnet/Custom Apps connections.
 //   Copyright (C) 2011  Stefano Ciancio
 //
 //   This library is free software; you can redistribute it and/or
@@ -24,13 +24,6 @@ import Gio from 'gi://Gio';
 import GObject from 'gi://GObject';
 import Shell from 'gi://Shell';
 
-/*
-  "Lang" is no longer available. Just removing it for now.
-  When the replacement code goes in, I'll remove this comment.
-  const Lang = imports.lang;
-*/
-  
-
 import * as Signals from 'resource:///org/gnome/shell/misc/signals.js';
 
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
@@ -47,14 +40,6 @@ let extensionObject, extensionSettings;
 let CM = Extension.lookupByURL(import.meta.url);
 let Me = Extension.lookupByURL(import.meta.url);
 
-/*
-  The code above should be the replacement for these two lines.
-  But I'm suspicious about why "CM" and "Me" need to be defined
-  and if the structure is still the same. Keeping these in a comment for now.
-  const Me = imports.misc.extensionUtils.getCurrentExtension();
-  const CM = imports.misc.extensionUtils.getCurrentExtension();
-*/
-
 // Import Command Terminal Manager and Search class
 import * as Search from './search.js'
 import * as Terminals from './terminals.js';
@@ -66,18 +51,20 @@ class ConnectionManager extends PanelMenu.Button {
 
     constructor() {
 
-        super(1.0, "Connection Manager", false);
+        super(1, "Connection Manager", false);
+
         this.CM = Extension.lookupByURL(import.meta.url);
 
-        this._box = new St.BoxLayout();
+        let box = new St.BoxLayout();
 
-        this._icon = new St.Icon({ gicon: Gio.icon_new_for_string(this.CM.path + '/emblem-cm-symbolic.svg'),
+        let icon = new St.Icon({ gicon: Gio.icon_new_for_string(this.CM.path + '/emblem-cm-symbolic.svg'),
                                              icon_size: 15 });
 
-        this._bin = new St.Bin({child: this._icon});
+        let bin = new St.Bin({child: icon});
 
-        this._box.add(this._bin);
-        this.add_actor(this._box);
+        box.add_child(bin);
+
+        this.add_child(box);
         this.add_style_class_name('panel-status-button');
 
         let CMPrefs = this.CM.metadata;
@@ -97,7 +84,7 @@ class ConnectionManager extends PanelMenu.Button {
             this.menu._setOpenedSubMenu = submenu => {
             this._openedSubMenu = submenu;
         }
-        
+
         this._sshList = [];
 
         if (GLib.file_test(this._configFile, GLib.FileTest.EXISTS) ) {
@@ -134,9 +121,6 @@ class ConnectionManager extends PanelMenu.Button {
             Util.trySpawnCommandLine('python ' + this._prefFile);
         });
         this.menu.addMenuItem(menuPref, this.menu.length+1);
-
-        // Update ssh name list
-        // this._searchProvider._update(this._sshList);        
     }
 
 
@@ -144,25 +128,25 @@ class ConnectionManager extends PanelMenu.Button {
 
         let child, menuItem, menuSep, menuSub, icon, label,
             menuItemAll, iconAll, menuSepAll, menuItemTabs, iconTabs, ident_prec;
-        let childHasItem = false, commandAll = new Array(), commandTab = new Array(), 
+        let childHasItem = false, commandAll = new Array(), commandTab = new Array(),
             sshparamsTab = new Array(), itemnr = 0;
 
-        // For each child ... 
+        // For each child ...
         for (let i = 0; i < node.length; i++) {
             child = node[i][0];
             let command;
-            
+
             if (child.hasOwnProperty('Type')) {
 
                 // Simple Item
                 if (child.Type == '__item__') {
 
                     menuItem = new PopupMenu.PopupBaseMenuItem();
-                    
+
                     icon = new St.Icon({icon_name: 'terminal',
                             style_class: 'connmgr-icon' });
                     menuItem.add_child(icon);
-                    
+
                     label = new St.Label({ text: ident+child.Name });
                     menuItem.add_child(label);
 
@@ -174,15 +158,15 @@ class ConnectionManager extends PanelMenu.Button {
                     let [commandT, sshparamsT] = this.TermCmd.createTabCmd();
 
                     menuItem.connect('activate', function() {
-                        Util.spawnCommandLine(command); 
+                        Util.spawnCommandLine(command);
                     });
                     parent.menu.addMenuItem(menuItem, i);
 
                     childHasItem = true;
                     if (this._menu_open_windows) { commandAll[itemnr] = command; }
-                    if (this._menu_open_tabs) { 
-                        commandTab[itemnr] = commandT; 
-                        sshparamsTab[itemnr] = sshparamsT; 
+                    if (this._menu_open_tabs) {
+                        commandTab[itemnr] = commandT;
+                        sshparamsTab[itemnr] = sshparamsT;
                     }
                     itemnr++;
 
@@ -216,7 +200,7 @@ class ConnectionManager extends PanelMenu.Button {
                     let [commandT, sshparamsT] = this.TermCmd.createTabCmd();
 
                     menuItem.connect('activate', function() {
-                        Util.spawnCommandLine(command); 
+                        Util.spawnCommandLine(command);
                     });
                     parent.menu.addMenuItem(menuItem, i);
 
@@ -224,7 +208,7 @@ class ConnectionManager extends PanelMenu.Button {
                     if (this._menu_open_windows) { commandAll[itemnr] = command; }
                     if (this._menu_open_tabs) {
                         commandTab[itemnr] = commandT;
-                        sshparamsTab[itemnr] = sshparamsT; 
+                        sshparamsTab[itemnr] = sshparamsT;
                     }
                     itemnr++;
 
@@ -244,13 +228,13 @@ class ConnectionManager extends PanelMenu.Button {
                 if (child.Type == '__sep__') {
                     parent.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem(), i);
                 }
-                
+
                 // Folder
                 if (child.Type == '__folder__') {
 
                     menuSub = new PopupMenu.PopupSubMenuMenuItem(ident+child.Name);
                     parent.menu.addMenuItem(menuSub);
-                    
+
                     ident_prec = ident;
                     this._readTree(child.Children, menuSub, ident+"  ");
 
@@ -269,7 +253,7 @@ class ConnectionManager extends PanelMenu.Button {
 
                 label = new St.Label({ text: ident+"Open all windows" });
                 menuItemAll.add_child(label);
-                
+
                 parent.menu.addMenuItem(menuItemAll, position);
                 position += 1;
                 menuItemAll.connect('activate', function() { 
@@ -318,23 +302,21 @@ class ConnectionManager extends PanelMenu.Button {
 let cm;
 
 export default class ConnectionManagerExtension extends Extension {
-    
+
     enable() {
-        
+
         // extensionPath = extensionMeta.path;
         extensionObject = Extension.lookupByUUID('connectionmanager2@ciancio.net');
         // extensionSettings = extensionObject.getSettings();
         extensionPath = extensionObject.path;
-        
+
         let theme = St.IconTheme.new();
-        //if (theme)
-        //    theme.append_search_path(extensionPath);
 
         this.cm = new ConnectionManager();
-        
+
         let _children_length = Main.panel._rightBox.get_n_children();
         Main.panel.addToStatusArea("connectionmanager", this.cm, _children_length - 2, "right");
-        
+
         let file = Gio.file_new_for_path(this.cm._configFile);
         this.cm.monitor = file.monitor(Gio.FileMonitorFlags.NONE, null);
         this.cm.monitor.connect('changed', () => this.cm._readConf());
@@ -350,14 +332,5 @@ export default class ConnectionManagerExtension extends Extension {
         this.cm.monitor.cancel();
         this.cm.destroy();
     }
-/*
-    constructor(extensionMeta) {
-        extensionPath = extensionMeta.path;
-        
-        let theme = St.IconTheme.new();
-        if (theme)
-            theme.append_search_path(extensionPath);
-
-    }
-*/
 }
+

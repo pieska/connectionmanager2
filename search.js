@@ -1,5 +1,5 @@
-//   ConnectionManager 3 - Simple GUI app for Gnome 3 that provides a menu 
-//   for initiating SSH/Telnet/Custom Apps connections. 
+//   ConnectionManager 3 - Simple GUI app for Gnome 3 that provides a menu
+//   for initiating SSH/Telnet/Custom Apps connections.
 //   Copyright (C) 2011  Stefano Ciancio
 //
 //   This library is free software; you can redistribute it and/or
@@ -29,26 +29,7 @@ import {Extension, gettext as _} from 'resource:///org/gnome/shell/extensions/ex
 const Me = Extension.lookupByURL(import.meta.url);
 
 
-/*
-  "Lang" is no longer available. Just removing it for now.
-  When the replacement code goes in, I'll remove this comment.
-  const Lang = imports.lang;
-*/
-
-// const Me = imports.misc.extensionUtils.getCurrentExtension();
-
-/*
-  The code above should be the replacement for these two lines.
-  Keeping these in a comment for now. (See extension.js)
-  const Me = imports.misc.extensionUtils.getCurrentExtension();
-*/
-
 import * as Config from 'resource:///org/gnome/shell/misc/config.js';
-/*
-  The above line should replace this one.
-  But there are now TWO config paths. I chose one, but I'm not sure I made the right choice.
-  const Config = imports.misc.config;
-*/
 
 // SSH / Apps Search Provider
 export class SearchProvider {
@@ -56,7 +37,7 @@ export class SearchProvider {
         this._extension = extension;
     }
 
-    // The application of the provider. Extensions will usually return `null`. 
+    // The application of the provider. Extensions will usually return `null`.
     get appInfo() {
         return null;
     }
@@ -126,7 +107,7 @@ export class SearchProvider {
                 resolve(resultMetas);
         });
         callback(metas);
-    }    
+    }
 }
 export class SshSearchProvider {
     constructor(extension) {
@@ -248,3 +229,4 @@ export class SshSearchProvider {
         Util.spawnCommandLine(this.sshNames[id-1].command);
     }
 }
+
