@@ -66,5 +66,7 @@ You can find other info:
 * [License](https://github.com/sciancio/connectionmanager/wiki/License)
 
 
-
+Testing
+========================
+$ dbus-run-session -- gnome-shell --nested --wayland 
 
