@@ -4,7 +4,7 @@
   "name": "Connection Manager", 
   "original-authors": "Stefano Ciancio", 
   "shell-version": [
-    "48.1"
+    "49.1"
   ], 
   "sw_bin": "connmgr.py", 
   "sw_config": ".connmgr", 
