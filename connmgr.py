@@ -498,7 +498,7 @@ This involves loss of information, it is recommended to revert it.")
         model, current_iter = self.tv.get_selection().get_selected()
 
         if current_iter:
-            if model.iter_parent(current_iter) == None:
+            if model.iter_parent(current_iter) is None:
                 return
 
             if self.is_folder(current_iter):
@@ -812,8 +812,11 @@ This involves loss of information, it is recommended to revert it.")
         if event.button == 1 and event.type == Gdk.EventType._2BUTTON_PRESS:
             model, current_iter = treeview.get_selection().get_selected()
 
+            if current_iter is None:
+                return
+
             # Root
-            if model.iter_parent(current_iter) == None:
+            if model.iter_parent(current_iter) is None:
                 return
 
             # Separator
