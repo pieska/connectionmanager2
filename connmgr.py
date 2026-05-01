@@ -616,7 +616,8 @@ This involves loss of information, it is recommended to revert it.")
         import_iter = treestore.append(Root, ['__folder__',
                     imported_from_SSH_config_folder, "", "", ""])
 
-        lines = [line.strip() for line in file(SSH_CONFIG_FILE)]
+        with open(SSH_CONFIG_FILE) as f:
+            lines = [line.strip() for line in f]
         comments_removed = [remove_comment(line) for line in lines]
         blanks_removed = [line for line in comments_removed if line]
         non_hosts_removed = [line for line in blanks_removed if a_host(line)]
