@@ -67,7 +67,7 @@ GlobalSettings['terminal'] = 0
 
 
 # I/O class
-class ConfIO(str):
+class ConfIO:
 
     json_output = ""
 
@@ -82,7 +82,7 @@ class ConfIO(str):
             for setting in dct['Global']:
 
                 if (type(dct['Global'][setting]) == bool):
-                    GlobalSettings[setting] = (dct['Global'][setting] == True)
+                    GlobalSettings[setting] = dct['Global'][setting]
 
                 if (type(dct['Global'][setting]) == int):
                     GlobalSettings[setting] = dct['Global'][setting]
@@ -195,12 +195,6 @@ class ConfIO(str):
 # Main class
 class ConnectionManager(Gtk.Window):
 
-    first_time_changes = True
-
-    tv = Gtk.TreeView()
-    bad_path = None
-    terminal_site = Gtk.LinkButton(supportedTermsSite[0], "Visit Terminal Homepage ")
-
     def fixTree(self, model, path, iter, user_data):
         piter = model.iter_parent(iter)
 
@@ -272,8 +266,10 @@ This involves loss of information, it is recommended to revert it.")
         self.connect("delete-event", self.on_click_me_close)
 
         # ---------------------------------------------
-        # Define input
-        self.treestore = Gtk.TreeStore(str, str, str, str)
+        self.first_time_changes = True
+        self.bad_path = None
+        self.tv = Gtk.TreeView()
+        self.terminal_site = Gtk.LinkButton(supportedTermsSite[0], "Visit Terminal Homepage ")
         # ---------------------------------------------
 
         self.conf_file = os.getenv("HOME") + "/.connmgr"
@@ -771,7 +767,7 @@ This involves loss of information, it is recommended to revert it.")
         box.add(table)
         dialog.show_all()
 
-        while 1:
+        while True:
             response = dialog.run()
             if response == Gtk.ResponseType.OK:
 
