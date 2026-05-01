@@ -29,13 +29,11 @@ if hasattr(GLib, "set_prgname"):
 
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk, Gio
-from io import StringIO
 
 import os.path
 import shutil
 import json
 
-import itertools
 import re
 import sys
 
