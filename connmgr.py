@@ -163,10 +163,8 @@ class ConfIO:
         if (os.path.exists(self.configuration_file) and \
             os.path.isfile(self.configuration_file)):
 
-            in_file = open(self.configuration_file, "r")
-
-            configuration = self.custom_decode(json.load(in_file))
-            in_file.close()
+            with open(self.configuration_file, "r") as in_file:
+                configuration = self.custom_decode(json.load(in_file))
 
         else:
             print ("Configuration file not exists")
@@ -187,9 +185,8 @@ class ConfIO:
                 "terminal": ' + json.dumps((GlobalSettings['terminal'])) + '} \
         }'
 
-        out_file = open(self.configuration_file, "w")
-        json.dump(json.loads(self.json_output), out_file, indent=2)
-        out_file.close()
+        with open(self.configuration_file, "w") as out_file:
+            json.dump(json.loads(self.json_output), out_file, indent=2)
 
 
 # Main class
