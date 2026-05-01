@@ -427,7 +427,7 @@ This involves loss of information, it is recommended to revert it.")
 
     # Add Element (item, separator, folder)
     def __addElement(self, newrow):
-        model, current_iter = self.tv.get_selection().get_selected()
+        _, current_iter = self.tv.get_selection().get_selected()
         if current_iter:
 
             if self.is_folder(current_iter):
@@ -435,20 +435,20 @@ This involves loss of information, it is recommended to revert it.")
                 if newrow[0] == '__folder__' or newrow[0] == '__item__' or newrow[0] == '__app__':
                     response, row = self.item_dialog(newrow)
                     if response:
-                        new_iter = self.treestore.insert_after(current_iter, None, row)
+                        self.treestore.insert_after(current_iter, None, row)
                         self.conf_modified()
                 if newrow[0] == '__sep__':
-                        new_iter = self.treestore.insert_after(current_iter, None, newrow)
+                        self.treestore.insert_after(current_iter, None, newrow)
                         self.conf_modified()
 
             if self.is_item(current_iter) or self.is_app(current_iter) or self.is_sep(current_iter):
                 if newrow[0] == '__folder__' or newrow[0] == '__item__' or newrow[0] == '__app__':
                     response, row = self.item_dialog(newrow)
                     if response:
-                        new_iter = self.treestore.insert_after(None, current_iter, row)
+                        self.treestore.insert_after(None, current_iter, row)
                         self.conf_modified()
                 if newrow[0] == '__sep__':
-                    new_iter = self.treestore.insert_after(None, current_iter, newrow)
+                    self.treestore.insert_after(None, current_iter, newrow)
                     self.conf_modified()
 
         else:
@@ -526,8 +526,8 @@ This involves loss of information, it is recommended to revert it.")
                 return True
 
     # Clone it - clone only Host / App
-    def on_click_me_cloneit(self, button):
-        model, current_iter = self.tv.get_selection().get_selected()
+    def on_click_me_cloneit(self, _button):
+        _, current_iter = self.tv.get_selection().get_selected()
 
         if current_iter and (self.is_item(current_iter) or self.is_app(current_iter)):
 
@@ -549,9 +549,9 @@ This involves loss of information, it is recommended to revert it.")
     def on_click_me_close(self, button, event=None):
         Gtk.main_quit()
 
-    def on_click_me_importsshconf(self, button):
+    def on_click_me_importsshconf(self, _button):
         imported_from_SSH_config_folder = '__Imported_from_SSH_config__'
-        model, current_iter = self.tv.get_selection().get_selected()
+        model, _ = self.tv.get_selection().get_selected()
 
         # Check if import folder already exists
         if model.iter_has_child(Root):
@@ -610,9 +610,6 @@ This involves loss of information, it is recommended to revert it.")
         def remove_comment(line):
             return re.sub(r'#.*$', '', line)
 
-        def not_a_host(line):
-            return get_value(line, 'Host') == ''
-
         def a_host(line):
             return get_value(line, 'Host') != ''
 
@@ -657,8 +654,6 @@ This involves loss of information, it is recommended to revert it.")
 
     def item_dialog(self, row):
 
-        model, current_iter = self.tv.get_selection().get_selected()
-
         dialog = Gtk.Dialog("Connection Details", self, 0,
         (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
         Gtk.STOCK_OK, Gtk.ResponseType.OK))
@@ -684,8 +679,6 @@ This involves loss of information, it is recommended to revert it.")
         
         if "org.gnome.Terminal.ProfilesList" in Gio.Settings.list_schemas():
             profilesList = Gio.Settings.new("org.gnome.Terminal.ProfilesList").get_value("list")
-
-            Gio.Settings.new("org.gnome.Terminal.ProfilesList").get_value("list")
 
             for index, item in enumerate(profilesList):
                 profile = Gio.Settings.new_with_path("org.gnome.Terminal.Legacy.Profile",
@@ -843,7 +836,7 @@ This involves loss of information, it is recommended to revert it.")
 
             return True
 
-    def on_choose_file(self, widget, entry):
+    def on_choose_file(self, _widget, entry):
         dialog = Gtk.FileChooserDialog("Please choose a file", self,
             Gtk.FileChooserAction.OPEN,
             (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
