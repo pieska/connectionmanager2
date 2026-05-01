@@ -299,45 +299,43 @@ This involves loss of information, it is recommended to revert it.")
             self.tv.append_column(column[index+1])
 
         # Buttons
-        button1 = Gtk.Button("Add Host")
+        button1 = Gtk.Button(label="Add Host")
         button1.connect("clicked", self.on_click_me_addhost)
-        button2 = Gtk.Button("Add App")
+        button2 = Gtk.Button(label="Add App")
         button2.connect("clicked", self.on_click_me_addapp)
-        button3 = Gtk.Button("Add Separator")
+        button3 = Gtk.Button(label="Add Separator")
         button3.connect("clicked", self.on_click_me_addsep)
-        button4 = Gtk.Button("Add SubMenu")
+        button4 = Gtk.Button(label="Add SubMenu")
         button4.connect("clicked", self.on_click_me_addmenu)
-        button5 = Gtk.Button("Remove")
+        button5 = Gtk.Button(label="Remove")
         button5.connect("clicked", self.on_click_me_remove)
-        button6 = Gtk.Button("Clone it")
+        button6 = Gtk.Button(label="Clone it")
         button6.connect("clicked", self.on_click_me_cloneit)
-        button7 = Gtk.Button("Import SSHConf")
+        button7 = Gtk.Button(label="Import SSHConf")
         button7.connect("clicked", self.on_click_me_importsshconf)
 
-        button8 = Gtk.Button("Close")
+        button8 = Gtk.Button(label="Close")
         button8.connect("clicked", self.on_click_me_close)
 
         # Specific Buttons
-        SpecButtons = Gtk.VButtonBox(spacing=6)
-        SpecButtons.set_layout(3)
-        SpecButtons.add(button1)
-        SpecButtons.add(button2)
-        SpecButtons.add(button3)
-        SpecButtons.add(button4)
-        SpecButtons.add(button5)
-        SpecButtons.add(button6)
-        SpecButtons.add(button7)
+        SpecButtons = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
+        SpecButtons.pack_start(button1, False, False, 0)
+        SpecButtons.pack_start(button2, False, False, 0)
+        SpecButtons.pack_start(button3, False, False, 0)
+        SpecButtons.pack_start(button4, False, False, 0)
+        SpecButtons.pack_start(button5, False, False, 0)
+        SpecButtons.pack_start(button6, False, False, 0)
+        SpecButtons.pack_start(button7, False, False, 0)
 
-        ExtButtons = Gtk.HButtonBox(margin_right=15, margin_bottom=3, margin_top=3)
-        ExtButtons.set_layout(4)
-        ExtButtons.add(button8)
+        ExtButtons = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, margin_end=15, margin_bottom=3, margin_top=3)
+        ExtButtons.pack_end(button8, False, False, 0)
         # ButtonBox
 
         # UI design
-        scrolled_window = Gtk.ScrolledWindow(hadjustment=None, vadjustment=None)
-        scrolled_window.add_with_viewport(self.tv)
+        scrolled_window = Gtk.ScrolledWindow()
+        scrolled_window.add(self.tv)
 
-        mybox = Gtk.HBox()
+        mybox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
         mybox.pack_start(scrolled_window, True, True, 6)
         mybox.pack_start(SpecButtons, False, False, 6)
 
@@ -353,7 +351,7 @@ This involves loss of information, it is recommended to revert it.")
         checkOpt2.connect("toggled", self.on_check_option_toggled, "menu_open_tabs")
 
         # Label/Combo of supported terminals
-        labelTerm = Gtk.Label('Choose your preferred terminal (first check its installation)', halign="start", margin_left=10)
+        labelTerm = Gtk.Label(label='Choose your preferred terminal (first check its installation)', halign="start", margin_start=10)
         labelTerm.set_justify(3)
 
         objectsList = Gtk.TreeStore(str, bool)
@@ -365,7 +363,7 @@ This involves loss of information, it is recommended to revert it.")
         terms_combo = Gtk.ComboBox.new_with_model(objectsList)
         terms_combo.set_wrap_width(1)
         terms_combo.set_halign(Gtk.Align.START)
-        terms_combo.set_margin_left(10)
+        terms_combo.set_margin_start(10)
 
         renderer_text = Gtk.CellRendererText()
         terms_combo.pack_start(renderer_text, True)
@@ -376,7 +374,7 @@ This involves loss of information, it is recommended to revert it.")
 
         self.terminal_site.set_uri(supportedTermsSite[GlobalSettings['terminal']])
 
-        options = Gtk.VBox(False, spacing=2)
+        options = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=2)
         options.pack_start(labelOpt, False, False, 10)
         options.pack_start(checkOpt1, False, False, 0)
         options.pack_start(checkOpt2, False, False, 0)
@@ -386,7 +384,7 @@ This involves loss of information, it is recommended to revert it.")
         
 
         # About Label
-        about = Gtk.VBox(False, spacing=2)
+        about = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=2)
         label_about = Gtk.Label('<span size="30000">ConnectionManager 3</span>\n<span>Version: '+VERSION+'\n\nSimple GUI app for Gnome 3 that provides\n a menu for initiating SSH/Telnet/Custom Apps connections.\n\nCopyright 2012-2014 Stefano Ciancio</span>')
         label_about.set_justify(2)
         label_about.set_use_markup(True)
@@ -405,7 +403,7 @@ This involves loss of information, it is recommended to revert it.")
         notebook.set_current_page(0)
 
         # External Box
-        ExtBox = Gtk.VBox()
+        ExtBox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         ExtBox.pack_start(notebook, True, True, 0)
         ExtBox.pack_end(ExtButtons, False, False, 0)
 
@@ -656,8 +654,8 @@ This involves loss of information, it is recommended to revert it.")
     def item_dialog(self, row):
 
         dialog = Gtk.Dialog("Connection Details", self, 0,
-        (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
-        Gtk.STOCK_OK, Gtk.ResponseType.OK))
+        ("_Cancel", Gtk.ResponseType.CANCEL,
+        "_OK", Gtk.ResponseType.OK))
 
         dialog.set_default_size(150, 100)
         dialog.set_modal(True)
@@ -717,43 +715,40 @@ This involves loss of information, it is recommended to revert it.")
             check7.set_active(True)
 
         if row[0] == '__folder__':
-            table = Gtk.Table(1, 2, True,
-            margin_right=15, margin_bottom=15, margin_top=15)
-            table.attach(label1, 0, 1, 0, 1)
-            table.attach(entry1, 1, 2, 0, 1)
+            table = Gtk.Grid(margin_end=15, margin_bottom=15, margin_top=15)
+            table.set_row_spacing(6)
+            table.set_column_spacing(6)
+            table.attach(label1, 0, 0, 1, 1)
+            table.attach(entry1, 1, 0, 1, 1)
 
         if row[0] == '__item__':
-            table = Gtk.Table(4, 2, True,
-                margin_right=15, margin_bottom=15,
-                margin_top=15)
-            table.set_row_spacings(6)
-            table.set_col_spacings(6)
+            table = Gtk.Grid(margin_end=15, margin_bottom=15, margin_top=15)
+            table.set_row_spacing(6)
+            table.set_column_spacing(6)
 
-            table.attach(label1, 0, 1, 0, 1)
-            table.attach(entry1, 1, 2, 0, 1)
+            table.attach(label1, 0, 0, 1, 1)
+            table.attach(entry1, 1, 0, 1, 1)
 
-            table.attach(label2, 0, 1, 1, 2)
-            table.attach(entry2, 1, 2, 1, 2)
+            table.attach(label2, 0, 1, 1, 1)
+            table.attach(entry2, 1, 1, 1, 1)
 
-            table.attach(label3, 0, 1, 2, 3)
-            table.attach(entry3, 1, 2, 2, 3)
-            table.attach(label4, 0, 1, 3, 4)
-            table.attach(entry4, 1, 2, 3, 4)
+            table.attach(label3, 0, 2, 1, 1)
+            table.attach(entry3, 1, 2, 1, 1)
+            table.attach(label4, 0, 3, 1, 1)
+            table.attach(entry4, 1, 3, 1, 1)
 
         if row[0] == '__app__':
-            table = Gtk.Table(4, 2, True,
-                margin_right=15, margin_bottom=15,
-                margin_top=15)
-            table.set_row_spacings(6)
-            table.set_col_spacings(6)
+            table = Gtk.Grid(margin_end=15, margin_bottom=15, margin_top=15)
+            table.set_row_spacing(6)
+            table.set_column_spacing(6)
 
-            table.attach(label1, 0, 1, 0, 1)
-            table.attach(entry1, 1, 2, 0, 1)
+            table.attach(label1, 0, 0, 1, 1)
+            table.attach(entry1, 1, 0, 1, 1)
 
-            table.attach(label5, 0, 1, 1, 2)
-            table.attach(entry5, 1, 2, 1, 2)
-            table.attach(button5, 1, 2, 2, 3)
-            table.attach(check7, 1, 2, 3, 4)
+            table.attach(label5, 0, 1, 1, 1)
+            table.attach(entry5, 1, 1, 1, 1)
+            table.attach(button5, 1, 2, 1, 1)
+            table.attach(check7, 1, 3, 1, 1)
 
         box.add(table)
         dialog.show_all()
@@ -843,8 +838,8 @@ This involves loss of information, it is recommended to revert it.")
     def on_choose_file(self, _widget, entry):
         dialog = Gtk.FileChooserDialog("Please choose a file", self,
             Gtk.FileChooserAction.OPEN,
-            (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
-            Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
+            ("_Cancel", Gtk.ResponseType.CANCEL,
+            "_Open", Gtk.ResponseType.OK))
 
         response = dialog.run()
         if response == Gtk.ResponseType.OK:
